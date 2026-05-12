@@ -1,0 +1,41 @@
+.chat-launch {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 30;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  color: white;
+  background: linear-gradient(#111827, #111827) padding-box, linear-gradient(135deg, var(--primary-strong), var(--secondary)) border-box;
+  box-shadow: var(--shadow);
+}
+.chatbot {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 30;
+  width: min(380px, calc(100vw - 24px));
+  height: min(520px, calc(100vh - 100px));
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(15, 15, 31, 0.98);
+  box-shadow: var(--shadow);
+  transform: translateY(0);
+  animation: chatIn 180ms ease from;
+}
+.chatbot header, .chatbot form { display: flex; align-items: center; gap: 10px; padding: 12px; border-bottom: 1px solid var(--border); }
+.chatbot form { border-top: 1px solid var(--border); border-bottom: 0; }
+.chatbot header { justify-content: space-between; }
+.chat-messages { padding: 14px; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
+.bubble { max-width: 82%; padding: 10px 12px; border-radius: 8px; line-height: 1.45; }
+.bubble.user { align-self: flex-end; background: var(--primary-strong); color: white; }
+.bubble.assistant { align-self: flex-start; background: #0f0f1f; border: 1px solid rgba(255,255,255,0.07); color: #e2e8f0; }
+@keyframes chatIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 560px) {
+  .chat-launch, .chatbot { right: 12px; bottom: 12px; }
+  .chatbot { width: calc(100vw - 24px); }
+}
