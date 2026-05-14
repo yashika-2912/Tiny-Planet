@@ -36,6 +36,12 @@ export default function App() {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const oauthToken = params.get('token');
+    if (oauthToken) {
+      localStorage.setItem('tiny_planet_token', oauthToken);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
     dispatch(fetchProfile());
     const id = window.setInterval(() => {
       fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/health`).catch(() => {});

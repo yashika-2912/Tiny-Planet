@@ -10,7 +10,9 @@ import authRoutes from './routes/authRoutes.js';
 import tripRoutes from './routes/tripRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
 import hotelRoutes from './routes/hotelRoutes.js';
+import mapRoutes from './routes/mapRoutes.js';
 import { errorMiddleware, notFound } from './middleware/errorMiddleware.js';
+import passport from './config/passport.js';
 
 dotenv.config();
 
@@ -35,6 +37,7 @@ app.use(cors({
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 app.use(morgan('dev'));
+app.use(passport.initialize());
 
 const aiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -49,6 +52,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/ai', aiLimiter, aiRoutes);
 app.use('/api/hotels', hotelRoutes);
+app.use('/api/maps', mapRoutes);
 app.use(notFound);
 app.use(errorMiddleware);
 

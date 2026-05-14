@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import BudgetChart from '../components/BudgetChart/BudgetChart';
+import HotelCard from '../components/HotelCard/HotelCard';
 import ItineraryTimeline from '../components/ItineraryTimeline/ItineraryTimeline';
 import { getTrip } from '../services/tripService';
 
@@ -20,6 +21,15 @@ export default function TripDetails() {
         <div className="panel"><ItineraryTimeline itinerary={trip.itinerary} destination={trip.destination} /></div>
         <div className="panel"><BudgetChart breakdown={trip.budgetBreakdown} /></div>
       </section>
+      {trip.hotels?.length > 0 && (
+        <section className="panel stack">
+          <span className="eyebrow">Selected stays</span>
+          <h3>Hotels added to this trip</h3>
+          <div className="grid three-cols">
+            {trip.hotels.map((hotel) => <HotelCard key={hotel.name} hotel={hotel} selected />)}
+          </div>
+        </section>
+      )}
     </main>
   );
 }

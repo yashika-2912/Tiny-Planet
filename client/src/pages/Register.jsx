@@ -19,6 +19,7 @@ export default function Register() {
         <label className="label">Email<input className="input" type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required /></label>
         <label className="label">Password<input className="input" type="password" minLength="6" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} required /></label>
         <button className="btn primary" disabled={loading}>{loading ? 'Creating...' : 'Create account'}</button>
+        <a className="btn ghost" href={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/google`}>Continue with Google</a>
         <p>Already registered? <Link to="/login">Log in</Link></p>
       </form>
     </main>

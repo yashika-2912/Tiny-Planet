@@ -17,7 +17,7 @@ const tripSchema = new mongoose.Schema({
   interests: [String],
   travelType: String,
   itinerary: [{ day: Number, slots: [slotSchema] }],
-  hotels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' }],
+  hotels: [{ type: mongoose.Schema.Types.Mixed }],
   budgetBreakdown: {
     hotel: Number,
     food: Number,

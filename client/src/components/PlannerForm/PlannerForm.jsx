@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import BudgetChart from '../BudgetChart/BudgetChart';
-import { calculateBudgetBreakdown } from '../../utils/budgetCalculator';
+import { calculateBudgetBreakdown, rebalanceBudget } from '../../utils/budgetCalculator';
 
 const interests = ['Beach', 'Mountains', 'Food', 'History', 'Adventure', 'Nightlife', 'Shopping', 'Nature'];
 const travelTypes = ['solo', 'couple', 'family', 'friends'];
@@ -16,8 +16,21 @@ export default function PlannerForm({ onSubmit, generating }) {
     budget: 25000,
     interests: ['Beach', 'Food']
   });
-  const breakdown = useMemo(() => calculateBudgetBreakdown(form), [form]);
-  const update = (key, value) => setForm((current) => ({ ...current, [key]: value }));
+  const calculatedBreakdown = useMemo(() => calculateBudgetBreakdown(form), [form]);
+  const [manualBreakdown, setManualBreakdown] = useState(calculatedBreakdown);
+
+  const update = (key, value) => {
+    setForm((current) => {
+      const next = { ...current, [key]: value };
+      setManualBreakdown(calculateBudgetBreakdown(next));
+      return next;
+    });
+  };
+
+  const adjustCategory = (key, value) => {
+    setManualBreakdown((current) => rebalanceBudget(current, key, Number(value)));
+  };
+
   const toggleInterest = (interest) => {
     update('interests', form.interests.includes(interest)
       ? form.interests.filter((item) => item !== interest)
@@ -25,7 +38,7 @@ export default function PlannerForm({ onSubmit, generating }) {
   };
 
   return (
-    <form className="panel stack" onSubmit={(event) => { event.preventDefault(); onSubmit({ ...form, budgetBreakdown: breakdown }); }}>
+    <form className="panel stack" onSubmit={(event) => { event.preventDefault(); onSubmit({ ...form, budgetBreakdown: manualBreakdown }); }}>
       <div className="split">
         <div>
           <span className="eyebrow">AI planner</span>
@@ -46,10 +59,17 @@ export default function PlannerForm({ onSubmit, generating }) {
       )}
       {step === 2 && (
         <div className="grid two-cols">
-          <label className="label">Total budget: ₹{Number(form.budget).toLocaleString('en-IN')}
+          <label className="label">Total budget: Rs {Number(form.budget).toLocaleString('en-IN')}
             <input type="range" min="1000" max="100000" step="1000" value={form.budget} onChange={(event) => update('budget', Number(event.target.value))} />
           </label>
-          <BudgetChart breakdown={breakdown} />
+          <div className="stack">
+            <BudgetChart breakdown={manualBreakdown} />
+            {Object.entries(manualBreakdown).map(([key, value]) => (
+              <label className="label" key={key}>{key}: Rs {Number(value).toLocaleString('en-IN')}
+                <input type="range" min="0" max={form.budget} step="500" value={value} onChange={(event) => adjustCategory(key, event.target.value)} />
+              </label>
+            ))}
+          </div>
         </div>
       )}
       {step === 3 && (

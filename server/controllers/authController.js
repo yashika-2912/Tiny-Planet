@@ -7,14 +7,18 @@ const signToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET || 'dev_secret
   expiresIn: process.env.JWT_EXPIRES_IN || '7d'
 });
 
-const sendAuth = (res, user) => {
-  const token = signToken(user._id);
+const setTokenCookie = (res, token) => {
   res.cookie('token', token, {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
     maxAge: 7 * 24 * 60 * 60 * 1000
   });
+};
+
+const sendAuth = (res, user) => {
+  const token = signToken(user._id);
+  setTokenCookie(res, token);
   res.json({ token, user: { id: user._id, _id: user._id, name: user.name, email: user.email, preferences: user.preferences } });
 };
 
@@ -74,4 +78,12 @@ export const forgotPassword = (req, res) => {
 
 export const resetPassword = (req, res) => {
   res.json({ message: 'Password has been reset.' });
+};
+
+export const googleCallback = (req, res) => {
+  const token = signToken(req.user._id);
+  setTokenCookie(res, token);
+  const target = new URL('/dashboard', process.env.CLIENT_URL || 'http://localhost:5173');
+  target.searchParams.set('token', token);
+  res.redirect(target.toString());
 };

@@ -44,7 +44,7 @@ export const getTrip = async (req, res, next) => {
       if (!trip) return res.status(404).json({ message: 'Trip not found' });
       return res.json({ trip });
     }
-    const trip = await Trip.findOne({ _id: req.params.id, userId: req.user._id }).populate('hotels');
+    const trip = await Trip.findOne({ _id: req.params.id, userId: req.user._id });
     if (!trip) return res.status(404).json({ message: 'Trip not found' });
     res.json({ trip });
   } catch (error) {
