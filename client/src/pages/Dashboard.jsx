@@ -20,7 +20,7 @@ export default function Dashboard() {
       </div>
       <section className="grid three-cols">
         <div className="panel"><span className="eyebrow">Trips planned</span><h2>{trips.length}</h2></div>
-        <div className="panel"><span className="eyebrow">Budget mapped</span><h2>₹{totalBudget.toLocaleString('en-IN')}</h2></div>
+        <div className="panel"><span className="eyebrow">Budget mapped</span><h2>Rs {totalBudget.toLocaleString('en-IN')}</h2></div>
         <div className="panel"><span className="eyebrow">Favorite signal</span><h2>{favorite}</h2></div>
       </section>
       <section className="grid two-cols">

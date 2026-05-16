@@ -16,7 +16,7 @@ export default function Home() {
           </div>
           <div className="stats-strip">
             <div className="stat"><strong>15s</strong><span>AI itinerary target</span></div>
-            <div className="stat"><strong>₹</strong><span>Smart budget splits</span></div>
+            <div className="stat"><strong>Rs</strong><span>Smart budget splits</span></div>
             <div className="stat"><strong>OSM</strong><span>Free maps</span></div>
             <div className="stat"><strong>Gemini</strong><span>Free-tier AI core</span></div>
           </div>

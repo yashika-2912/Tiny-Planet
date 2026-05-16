@@ -1,17 +1,9 @@
 import React from 'react';
-import { MapContainer, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
+import { CircleMarker, MapContainer, Polyline, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
 
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png'
-});
-
-const DARK_TILES = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-const ATTRIBUTION = '© OpenStreetMap © CARTO';
+const LIGHT_TILES = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const ATTRIBUTION = 'OpenStreetMap contributors';
 
 export default function RouteMap({ places = [] }) {
   const usable = places.filter((place) => place.coordinates?.lat && place.coordinates?.lng);
@@ -21,13 +13,23 @@ export default function RouteMap({ places = [] }) {
   return (
     <div className="map">
       <MapContainer center={[center.lat, center.lng]} zoom={12} style={{ height: '100%', width: '100%' }}>
-        <TileLayer attribution={ATTRIBUTION} url={DARK_TILES} />
-        {usable.map((place) => (
-          <Marker key={place.name} position={[place.coordinates.lat, place.coordinates.lng]}>
+        <TileLayer attribution={ATTRIBUTION} url={LIGHT_TILES} />
+        {usable.map((place, index) => (
+          <CircleMarker
+            key={place.name}
+            center={[place.coordinates.lat, place.coordinates.lng]}
+            radius={index === 0 ? 9 : 7}
+            pathOptions={{
+              color: index === 0 ? '#1d4ed8' : '#0891b2',
+              fillColor: index === 0 ? '#2563eb' : '#14b8a6',
+              fillOpacity: 0.9,
+              weight: 3
+            }}
+          >
             <Popup>{place.name}</Popup>
-          </Marker>
+          </CircleMarker>
         ))}
-        {line.length > 1 && <Polyline positions={line} color="#00D4AA" weight={4} />}
+        {line.length > 1 && <Polyline positions={line} color="#2563eb" weight={4} />}
       </MapContainer>
     </div>
   );

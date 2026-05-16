@@ -24,12 +24,12 @@ export default function ItineraryTimeline({ itinerary = [], destination = 'Your 
     <div className="timeline" ref={rootRef}>
       {itinerary.map((day) => (
         <section className="day-block" key={day.day}>
-          <div className="day-header">Day {day.day} — {destination}</div>
+          <div className="day-header">Day {day.day} - {destination}</div>
           {day.slots?.map((slot, index) => (
             <article className="card slot-card" key={`${day.day}-${slot.time}-${index}`}>
               <div className="split">
                 <div className="row"><Clock3 size={18} /> <strong>{slot.time}</strong></div>
-                <span className="badge cost">₹{Number(slot.estimatedCost || 0).toLocaleString('en-IN')}</span>
+                <span className="badge cost">Rs {Number(slot.estimatedCost || 0).toLocaleString('en-IN')}</span>
               </div>
               <h3 className="row"><MapPin size={18} /> {slot.place}</h3>
               <p>{slot.description}</p>

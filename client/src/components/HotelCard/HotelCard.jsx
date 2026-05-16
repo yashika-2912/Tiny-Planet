@@ -4,6 +4,7 @@ import { Hotel, Star } from 'lucide-react';
 export default function HotelCard({ hotel, onAdd, selected = false }) {
   return (
     <article className="card stack">
+      {hotel.images?.[0] && <img className="hotel-image" src={hotel.images[0]} alt={hotel.name} loading="lazy" />}
       <div className="split">
         <h3 className="row"><Hotel size={18} /> {hotel.name}</h3>
         <span className="badge row"><Star size={14} /> {hotel.rating}</span>

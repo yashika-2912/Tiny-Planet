@@ -1,4 +1,5 @@
 import React from 'react';
+import { Download } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import BudgetChart from '../components/BudgetChart/BudgetChart';
@@ -11,11 +12,15 @@ export default function TripDetails() {
   const [trip, setTrip] = useState(null);
   useEffect(() => { getTrip(id).then(({ data }) => setTrip(data.trip)).catch(() => {}); }, [id]);
   if (!trip) return <main className="page-shell"><div className="skeleton hero-skeleton" /></main>;
+
   return (
     <main className="page-shell stack">
       <div className="page-header">
         <div><span className="eyebrow">Trip plan</span><h2>{trip.destination}</h2></div>
-        <span className="badge">{trip.days} days · ₹{Number(trip.budget).toLocaleString('en-IN')}</span>
+        <div className="row">
+          <span className="badge">{trip.days} days - Rs {Number(trip.budget).toLocaleString('en-IN')}</span>
+          <button className="btn primary no-print" type="button" onClick={() => window.print()}><Download size={16} /> Export PDF</button>
+        </div>
       </div>
       <section className="grid two-cols">
         <div className="panel"><ItineraryTimeline itinerary={trip.itinerary} destination={trip.destination} /></div>

@@ -23,11 +23,32 @@ const seededHotels = [
   { name: 'Rishikesh Ghat Stay', location: 'Rishikesh', coordinates: { lat: 30.0869, lng: 78.2676 }, pricePerNight: 2600, rating: 4.4, distance: '1.5 km', amenities: ['Yoga deck', 'River access'], source: 'seeded' }
 ];
 
+const imageByLocation = {
+  goa: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=900&q=80',
+  jaipur: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=900&q=80',
+  manali: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=900&q=80',
+  delhi: 'https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=900&q=80',
+  mumbai: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=900&q=80',
+  kerala: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=900&q=80',
+  coorg: 'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=900&q=80',
+  shimla: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=900&q=80',
+  mysore: 'https://images.unsplash.com/photo-1600112356915-089abb8fc71a?auto=format&fit=crop&w=900&q=80',
+  chennai: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=900&q=80',
+  udaipur: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=900&q=80',
+  gokarna: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80',
+  rishikesh: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?auto=format&fit=crop&w=900&q=80'
+};
+
+const withImage = (hotel) => {
+  const key = hotel.location.toLowerCase();
+  return { ...hotel, images: hotel.images?.length ? hotel.images : [imageByLocation[key] || imageByLocation.goa] };
+};
+
 export const searchHotels = async ({ destination = '', budget = 100000, rating = 0 }) => {
   const maxNightly = Number(budget) / 3 || Number(budget) || 100000;
   return seededHotels.filter((hotel) => (
     hotel.location.toLowerCase().includes(String(destination).toLowerCase())
     && hotel.pricePerNight <= maxNightly
     && hotel.rating >= Number(rating || 0)
-  ));
+  )).map(withImage);
 };
